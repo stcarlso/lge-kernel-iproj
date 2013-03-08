@@ -118,6 +118,9 @@
 #ifdef CONFIG_LGE_WIRELESS_CHARGER_BQ24160
 #include <linux/bq24160-charger.h>
 #endif
+#ifdef CONFIG_LGE_WIRELESS_CHARGER_RT9524
+#include <linux/rt9524-charger.h>
+#endif
 
 #if 0 /* moved following macros into devices_i_vzw.h */
 /* Macros assume PMIC GPIOs start at 0 */
@@ -2793,6 +2796,12 @@ struct platform_device msm_device_sdio_al = {
 
 #endif /* CONFIG_MSM_SDIO_AL */
 
+#ifdef CONFIG_LGE_WIRELESS_CHARGER_RT9524
+static struct platform_device rt9524_charger_device = {
+       .name = "rt9524",
+       .id = 0,
+};
+#endif
 #ifdef CONFIG_LGE_PMIC8901_REGULATOR
 /* we don't use */
 #else
@@ -3045,7 +3054,11 @@ static struct platform_device *surf_devices[] __initdata = {
 
 #ifdef CONFIG_LGE_HALLIC_CARKIT
 	&hallic_dock_device,
-#endif	
+#endif
+
+#ifdef CONFIG_LGE_WIRELESS_CHARGER_RT9524
+       &rt9524_charger_device,
+#endif
 
 };
 

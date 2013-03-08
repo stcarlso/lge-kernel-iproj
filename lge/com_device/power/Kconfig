@@ -85,6 +85,13 @@ config LGE_WIRELESS_CHARGER_BQ24160
 	help
 		LGE WIRELESS Charger BQ24160 Configuration
 
+config LGE_WIRELESS_CHARGER_RT9524
+       depends on ARCH_MSM8X60
+       default n
+       bool "LGE WIRELESS Charger RT9524 Configuration"
+       help
+       LGE WIRELESS Charger RT9524 Configuration
+
 config LGE_MDM_PMIC_8028
 	depends on ARCH_MSM8X60
 	default y

@@ -82,7 +82,7 @@ static int vibrator_power_set(int enable)
 {
 	int rc;
 
-	printk(KERN_INFO "LGE: %s  enable=%d\n", __func__, enable);
+	//printk(KERN_INFO "LGE: %s  enable=%d\n", __func__, enable);
 
 	if (NULL == snddev_reg_l1) {
 		snddev_reg_l1 = regulator_get(NULL, "8901_l1");
