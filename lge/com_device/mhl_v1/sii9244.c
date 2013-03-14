@@ -48,8 +48,8 @@ extern void hdmi_common_send_uevent(char *buf);
 extern void hdmi_common_set_hpd(int on);
 
 #ifdef MHL_CTL
-#define MHL_DEV_INPUT_KBMOUSE_EVENT 		"/dev/input/event12"
-// #undef MHL_DEV_INPUT_KBMOUSE_EVENT
+#define MHL_DEV_INPUT_KBMOUSE_EVENT 		"/dev/input/event9"
+#undef MHL_DEV_INPUT_KBMOUSE_EVENT
 
 #define DRIVER_VERSION "v1.0"
 #define DRIVER_NAME "mhl_virtual_kbmouse"
@@ -60,6 +60,14 @@ static struct input_dev *mhl_virtual_kbmouse;
 #endif
 #endif
 
+#ifdef TIMER_ACC_ADC
+#define TIMER_VAL_START   500000000
+#define TIMER_VAL_RUNNING 200000000
+static struct hrtimer sii9244_adc_timer;
+static struct workqueue_struct *sii9244_adc_wq;
+static struct work_struct sii9244_adc_work;
+static int mhl_off_request = 0;
+#endif
 #define MHL_PWRON_DELAY_MS   0//50 //5000
 #define MHL_WORKREQ_PWROFF  (1 << 0)
 #define MHL_WORKREQ_PWRON   (1 << 1)
@@ -816,8 +824,7 @@ static int mhl_virtual_kbmouse_register(void)		// mouse & keyboard emulator...
 	mhl_virtual_kbmouse->relbit[0] = BIT_MASK(REL_X) | BIT_MASK(REL_Y);
 	for(key_cnt = 0x01; key_cnt < KEY_REDO; key_cnt++)
 	{
-		if (key_cnt != KEY_Q)
-		   set_bit(key_cnt, mhl_virtual_kbmouse->keybit);
+		set_bit(key_cnt, mhl_virtual_kbmouse->keybit);
 	}
 
 	rc = input_register_device(mhl_virtual_kbmouse);

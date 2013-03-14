@@ -1010,7 +1010,11 @@ static void DeglitchRsenLow( void )
 	I2C_WriteByte(SA_TX_HDMI_RX_Primary, 0x31, 0x0A);	// Rx PLL BW ~ 4MHz
 	I2C_WriteByte(SA_TX_Page0_Primary, 0xA0, 0xD0);
 	I2C_WriteByte(SA_TX_Page0_Primary, 0xA1, 0xFC);	// Disable internal MHL driver
+#if defined(CONFIG_MACH_LGE_120_BOARD)
+  I2C_WriteByte(SA_TX_Page0_Primary, 0xA3, /*0xEB*/0xFE); //MHL tuning by Hardware
+#else
        I2C_WriteByte(SA_TX_Page0_Primary, 0xA3, /*0xEB*/0xFB);
+#endif
 	I2C_WriteByte(SA_TX_Page0_Primary, 0xA6, 0x0C);
 	
 
