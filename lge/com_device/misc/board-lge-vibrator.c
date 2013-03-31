@@ -1,10 +1,15 @@
-/* * Copyright (C) 2009 LGE, Inc. * * Author: Sungwoo Cho <sungwoo.cho@lge.com> 
-* * This software is licensed under the terms of the GNU General Public * 
-License version 2, as published by the Free Software Foundation, and * may be 
-copied, distributed, and modified under those terms. * * This program is 
-distributed in the hope that it will be useful, * but WITHOUT ANY WARRANTY; 
-without even the implied warranty of * MERCHANTABILITY or FITNESS FOR A 
-PARTICULAR PURPOSE.  See the * GNU General Public License for more details. */
+/*
+ * Copyright (C) 2009 LGE, Inc. * * Author: Sungwoo Cho <sungwoo.cho@lge.com>
+ *
+ * This software is licensed under the terms of the GNU General Public
+ * License version 2, as published by the Free Software Foundation, and
+ * may be copied, distributed, and modified under those terms.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ */
 
 #include <linux/types.h>
 #include <linux/list.h>
@@ -81,6 +86,7 @@ static bool snddev_reg_l1_status = false;
 static int vibrator_power_set(int enable)
 {
 	int rc;
+	bool newStatus = (enable != 0);
 
 	//printk(KERN_INFO "LGE: %s  enable=%d\n", __func__, enable);
 
@@ -91,15 +97,15 @@ static int vibrator_power_set(int enable)
 			pr_err("LGE: VIB %s: regulator_get(%s) failed (%ld)\n", __func__,
 			       "l1", PTR_ERR(snddev_reg_l1));
 			return -EBUSY;
-		}	
+		}
 	}
-	if(enable == snddev_reg_l1_status) return 0;
-	if (enable) {
+	if (newStatus == snddev_reg_l1_status) return 0;
+	if (newStatus) {
 		rc = regulator_set_voltage(snddev_reg_l1, VIBE_IC_VOLTAGE, VIBE_IC_VOLTAGE);
 		if (rc < 0)
 			pr_err("LGE:  VIB %s: regulator_set_voltage(l1) failed (%d)\n",
 			__func__, rc);
-			
+
 		rc = regulator_enable(snddev_reg_l1);
 
 		if (rc < 0)
@@ -111,7 +117,7 @@ static int vibrator_power_set(int enable)
 		if (rc < 0)
 			pr_err("%s: regulator_disable(l1) failed (%d)\n", __func__, rc);
 		snddev_reg_l1_status = false;
-	}	
+	}
 
 	return 0;
 }
